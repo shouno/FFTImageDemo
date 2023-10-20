@@ -1,39 +1,40 @@
-# -*- coding: utf-8 -*-
-
-
 import numpy as np
 import scipy as sp
-from scipy import misc
+from scipy.fft import fft2, fftshift
+from PIL import Image  # 現代風に Pillow を使おう
 from matplotlib import cm
 import matplotlib.pylab as plt
 
 
-#l = misc.lena()
-l = misc.imread( '../test_images/boat.png' )
-slena = misc.imresize( l, (64,64), interp='bilinear' ) / 255.
-#slena = np.random.randn( 64, 64 )
+#
+IMG_SIZE = 128
+src_img = Image.open("../test_images/boat.png")
+img = src_img.resize((IMG_SIZE, IMG_SIZE))
 
-fig = plt.figure()
-ax = fig.gca()
+fig = plt.figure(figsize=(12, 4))
+axs = fig.subplots(1, 3)
 
-plt.subplot( 1, 2, 1 )
-axsub1 = plt.imshow( slena, interpolation='nearest' )
-plt.xticks(())
-plt.yticks(())
-plt.title( 'Original' )
-fig.colorbar( axsub1, shrink=0.4, aspect=10 )
+org_img = axs[0].imshow(img, cmap="gray")
+axs[0].set_title("Original")
+axs[0].set_xticks([])
+axs[0].set_yticks([])
+cbar0 = plt.colorbar(org_img, shrink=0.6, aspect=10)
+# fig.colorbar(axsub1, shrink=0.4, aspect=10)
 
 
-SLENA = np.fft.fft2( slena )
-plt.subplot( 1, 2, 2 )
-axsub2 = plt.imshow( np.fft.fftshift( np.abs( SLENA ) ), interpolation='nearest', cmap=cm.coolwarm )
-plt.title( 'Fourier Power' )
-#axsub2 = plt.imshow( np.fft.fftshift( np.log( np.abs( SLENA ) ) ), interpolation='nearest', cmap=cm.coolwarm )
-#plt.title( 'Fourier Power(Log)' )
+FFT_IMG = fft2(img)
+fft_img_orig = axs[1].imshow(fftshift(np.abs(FFT_IMG)), cmap="jet")
+axs[1].set_title("Fourier Power")
+axs[1].set_xticks([])
+axs[1].set_yticks([])
+cbar1 = plt.colorbar(fft_img_orig, shrink=0.6, aspect=10)
 
-plt.xticks(())
-plt.yticks(())
-fig.colorbar( axsub2, shrink=0.4, aspect=10 )
+fft_img_log = axs[2].imshow(np.log(fftshift(np.abs(FFT_IMG))), cmap="jet")
+axs[2].set_title("Fourier Power(Log)")
+axs[2].set_xticks([])
+axs[2].set_yticks([])
+cbar2 = plt.colorbar(fft_img_log, shrink=0.6, aspect=10)
 
+plt.tight_layout()
 
 plt.show()
