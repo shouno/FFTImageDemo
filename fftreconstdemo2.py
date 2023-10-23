@@ -3,7 +3,7 @@
 
 import numpy as np
 import scipy as sp
-from scipy import misc
+from skimage.transform import resize
 from matplotlib import cm
 import matplotlib.pylab as plt
 
@@ -23,16 +23,16 @@ def scnseq( n ):
         ret += scnline( i )
     return ret
 
-l = misc.lena()
-N = 64
-slena = misc.imresize( l, (N, N), interp='bilinear' ) / 255.
 
-SLENA = np.fft.fft2( slena )
+l = plt.imread('../test_images/lena.png')
+N = 64
+slena = resize(l, (N, N)) / 255.
+SLENA = np.fft.fft2(slena)
 
 flt = np.zeros( (N, N) )
 
 
-RecRange = 20
+RecRange = 25
 RecSeq = scnseq( RecRange )
 
 for p in (RecSeq):
@@ -70,4 +70,6 @@ for p in (RecSeq):
     plt.imshow( np.fft.fftshift(flt), interpolation='nearest' )
     plt.title( 'Recon. Pos.' )
 
-    plt.pause(0.001)
+    plt.pause(0.0001)
+
+input()

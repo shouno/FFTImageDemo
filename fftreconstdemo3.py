@@ -14,7 +14,6 @@ def scnline( n ):
         ret.append( (i,n-i) )
     for i in range(n+1):
         ret.append( (-i,n-i) )
-            
     return ret
 
 def scnseq( n ):
