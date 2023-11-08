@@ -1,5 +1,5 @@
 # FFTImageDemo
 
-FFT reconstruction demonstration with several animations
+FFT による画像再構成のデモの雑多なノートブック群．
 
 
